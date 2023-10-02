@@ -9,33 +9,59 @@ import SwiftUI
 
 @main
 struct Forelesning_3_23App: App {
+  
+  
+  @State var numberOfItemsInShoppingCart: Int = 3
+  
+  @State var shoppingCart = [Product]()
+  
+  func onAppear() {
     
-    @State var numberOfItemsInShoppingCart: Int = 3
-    
-    @State var shoppingCart = [Product]()
-    
-    var body: some Scene {
-        WindowGroup {
-            TabView {
-                ProductListView(products: Product.demoProducts, isAdmin: false, shoppingCart: $shoppingCart)
-//                    .badge(99)
-                    .tabItem {
-                        Label("Produkter", systemImage: "tray.and.arrow.up.fill")
-                    }
-                
-                ShoppingCart()
-                    .badge($shoppingCart.count)
-                    .tabItem {
-                        Label("Handlekurv", systemImage: "tray.and.arrow.up.fill")
-                    }
-                
-                SettingsView()
-                    .tabItem {
-                        Label.init("Innstillinger", systemImage: "pencil")
-                    }
-                
-            }
-            
-        }
+  }
+  
+  /// Save to disk
+  func shoppingCartOnAppear() {
+    let encoder = JSONEncoder()
+    do {
+      let data = try encoder.encode(shoppingCart)
+      let fm = FileManager.default
+      // hent ut path til documents
+      let fileURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        .appendingPathComponent("data.json")
+      
+      try data.write(to: fileURL)
+    } catch let error {
+      print(error)
     }
+  }
+  
+  var body: some Scene {
+    WindowGroup {
+      TabView {
+        ProductListView(products: Product.demoProducts, isAdmin: false, shoppingCart: $shoppingCart)
+        //                    .badge(99)
+          .tabItem {
+            Label("Produkter", systemImage: "tray.and.arrow.up.fill")
+          }
+        
+        ShoppingCart(shoppingCart: $shoppingCart)
+          .badge($shoppingCart.count)
+          .tabItem {
+            Label("Handlekurv", systemImage: "tray.and.arrow.up.fill")
+          }.onAppear{
+            shoppingCartOnAppear()
+          }
+        
+        SettingsView()
+          .tabItem {
+            Label.init("Innstillinger", systemImage: "pencil")
+          }
+        
+      }.onAppear{
+        onAppear()
+      }
+      
+    }
+  }
 }
+

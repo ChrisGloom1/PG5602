@@ -8,17 +8,31 @@
 import SwiftUI
 
 struct ShoppingCart: View {
-    
-    var body: some View {
-        NavigationView  {
-            VStack { }
-            .navigationTitle("Handlekurv")
+  
+  var shoppingCart: Binding<[Product]>
+  
+  init(shoppingCart: Binding<[Product]>) {
+    self.shoppingCart = shoppingCart
+  }
+  
+  var body: some View {
+    NavigationView  {
+      List {
+        ForEach(shoppingCart) { product in
+          Text("\(product.wrappedValue.name) - \(product.wrappedValue.price) kr")
         }
+      }
+      .navigationTitle("Handlekurv")
     }
+  }
 }
 
 struct ShoppingCart_Previews: PreviewProvider {
-    static var previews: some View {
-        ShoppingCart()
-    }
+  static var previews: some View {
+    ShoppingCart(shoppingCart: .constant(
+      [
+        Product(name: "Bøttehatt", description: "Jækla schtøgg", price: 420, images: [])
+      ]
+    ))
+  }
 }
