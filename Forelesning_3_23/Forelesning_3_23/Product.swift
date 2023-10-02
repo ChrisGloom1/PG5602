@@ -13,6 +13,7 @@ struct Student {
 
 
 struct Product: Identifiable, Codable {
+<<<<<<< Updated upstream
     
     let id: UUID = UUID()
     
@@ -35,11 +36,30 @@ struct Product: Identifiable, Codable {
 //    self.price = try container.decode(Int.self, forKey: .price)
 //  }
     
+=======
+  
+  let id: UUID = UUID()
+  
+  let name: String
+  let description: String
+  let price: Int
+  
+  let images: [ProductImage]
+  
+  enum CodingKeys: String, CodingKey {
+    case name
+    case description = "desc"
+    case price
+    case images = "product_images"
+    case id
+  }
+>>>>>>> Stashed changes
 }
 
 
 extension Product {
   
+<<<<<<< Updated upstream
   /// JSONlint to validate JSON format
   static var sampleJSON: String {
     /// three quotes to support multi line strings
@@ -56,10 +76,31 @@ extension Product {
     """
   }
   
+=======
+  
+  static var sampleJSON: String {
+         """
+        {
+            "name": "Bukse",
+            "desc": "Grå, str 32",
+            "price": 500,
+            "product_images": [{
+                "url": "https://google.com",
+                "description": "Buksa i grønn versjon"
+            }]
+        }
+        """
+  }
+>>>>>>> Stashed changes
 }
 
 extension Product {
+  
+  static let demoProducts = [
+    Product.init(name: "Bukse", description: "Grå, str 32", price: 500, images: []),
+    Product.init(name: "T-skjorte", description: "hvit, medium. Laget av egyptisk bomull", price: 800, images: [])
     
+<<<<<<< Updated upstream
     static let demoProducts = [
       Product.init(name: "Bukse", description: "Grå, str 32", price: 500, images: []),
       Product.init(name: "T-skjorte", description: "hvit, medium. Laget av egyptisk bomull", price: 800, images: [])
@@ -73,4 +114,15 @@ extension Product {
 //        ]
 //    }
     
+=======
+  ]
+  
+  //    static func testReturnProducts() -> [Product] {
+  //        return [
+  //            Product.init(name: "Genser", description: "Brun med mønster på magen, str 34", price: 890),
+  //            Product.init(name: "Olabukse", description: "str 34/34", price: 1230)
+  //        ]
+  //    }
+  
+>>>>>>> Stashed changes
 }

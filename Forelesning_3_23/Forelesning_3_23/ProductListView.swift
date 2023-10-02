@@ -38,6 +38,7 @@ struct ProductListView: View {
   @State var newProductName: String = ""
   @State var newProductPrice: String = ""
   @State var newProductDescription: String = ""
+<<<<<<< Updated upstream
   @State var userLoginStatus: String = ""
   
   
@@ -63,6 +64,30 @@ struct ProductListView: View {
   
   
   func addProduct() {
+=======
+  
+  @State var userLoginStatus: String = ""
+  
+  /// Called when view appears
+  func onAppear() {
+    print("on appear product list")
+    
+    // not admin
+    if KeychainSwift().get(AppStorageKeys.password.rawValue) != nil,
+       
+        
+        
+        let username = UserDefaults().object(forKey: AppStorageKeys.username.rawValue) as? String
+    {
+      userLoginStatus = "Logget inn bruker: \(username)"
+    } else {
+      userLoginStatus = "Vennligst logg inn i appen"
+    }
+  }
+  
+  func addProduct() {
+    print()
+>>>>>>> Stashed changes
     print("user still tapped button")
     if let productPrice = Int(newProductPrice) {
       let product = Product(name: newProductName, description: newProductDescription, price: productPrice, images: [])
@@ -93,14 +118,21 @@ struct ProductListView: View {
                   print("Minus button tapped")
                   var hasRemoved = false
                   shoppingCart.wrappedValue.removeAll { filteredProduct in
+<<<<<<< Updated upstream
                     if filteredProduct.id == product.id,
+=======
+                    if filteredProduct.name == product.name,
+>>>>>>> Stashed changes
                        hasRemoved == false {
                       hasRemoved = true
                       return true
                     }
                     return false
                   }
+<<<<<<< Updated upstream
                   print(shoppingCart)
+=======
+>>>>>>> Stashed changes
                 },
                 plusButtonTapped: {
                   print("Plus button tapped")
@@ -121,6 +153,7 @@ struct ProductListView: View {
         
         if isAdmin {
           Button("Legg til produkt") {
+<<<<<<< Updated upstream
             let newProduct = Product.init(name: "Sokker", description: "small, gule", price: 230, images: [])
             print(products.count) // printer 2
             products.append(newProduct)
@@ -130,6 +163,13 @@ struct ProductListView: View {
         } else {
           Text(userLoginStatus)
           // not admin
+=======
+            isPresentingAddProductView = true
+          }// Button
+        } else {
+          Text(userLoginStatus)
+          
+>>>>>>> Stashed changes
         }
       }.sheet(isPresented: $isPresentingAddProductView) {
         AddProductView() { product in
@@ -137,9 +177,15 @@ struct ProductListView: View {
           isPresentingAddProductView = false
         }
       }
+<<<<<<< Updated upstream
     }.onAppear{
       onAppear()
     }.onDisappear{
+=======
+    }.onAppear {
+      onAppear()
+    }.onDisappear {
+>>>>>>> Stashed changes
       
     }
   }
