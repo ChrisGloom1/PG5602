@@ -9,32 +9,31 @@ import Foundation
 
 
 struct Student {
-    let firstName: String
+  let firstName: String
 }
 
 struct Product: Identifiable, Codable {
-    
-    let id: UUID = UUID()
-    
-    let name: String
-    let description: String
-    let price: Int
-    
-    let images: [ProductImage]
-    
-    enum CodingKeys: String, CodingKey {
-        case name
-        case description = "desc"
-        case price
-        case images = "product_images"
-        case id
-    }
+  
+  let id: UUID = UUID()
+  let name: String
+  let description: String
+  let price: Int
+  
+  let images: [ProductImage]
+  
+  enum CodingKeys: String, CodingKey {
+    case name
+    case description = "desc"
+    case price
+    case images = "product_images"
+    case id
+  }
 }
 
 extension Product {
-    
-    
-    static var sampleJSON: String {
+  
+  
+  static var sampleJSON: String {
          """
         {
             "name": "Bukse",
@@ -46,24 +45,24 @@ extension Product {
             }]
         }
         """
-    }
+  }
 }
 
 
 extension Product {
+  
+  static let demoProducts = [
+    Product.init(name: "Bukse", description: "Grå, str 32", price: 500, images: []),
+    Product.init(name: "T-skjorte", description: "hvit, medium. Laget av egyptisk bomull", price: 800, images: [])
     
-    static let demoProducts = [
-        Product.init(name: "Bukse", description: "Grå, str 32", price: 500, images: []),
-        Product.init(name: "T-skjorte", description: "hvit, medium. Laget av egyptisk bomull", price: 800, images: [])
-        
-    ]
-    
-//    static func testReturnProducts() -> [Product] {
-//        return [
-//            Product.init(name: "Genser", description: "Brun med mønster på magen, str 34", price: 890),
-//            Product.init(name: "Olabukse", description: "str 34/34", price: 1230)
-//        ]
-//    }
-    
+  ]
+  
+  //    static func testReturnProducts() -> [Product] {
+  //        return [
+  //            Product.init(name: "Genser", description: "Brun med mønster på magen, str 34", price: 890),
+  //            Product.init(name: "Olabukse", description: "str 34/34", price: 1230)
+  //        ]
+  //    }
+  
 }
 
