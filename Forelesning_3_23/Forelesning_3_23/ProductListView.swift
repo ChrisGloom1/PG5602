@@ -53,7 +53,7 @@ struct ProductListView: View {
     {
       userLoginStatus = "Logget inn bruker: \(username)"
     } else {
-      userLoginStatus = "Vennligst logg inn i appen"
+      userLoginStatus = "Vennligst logg inn i appen, noob"
     }
     
     // Use of Task because of task handling on threads. Use to update UI on thread 1 (main) for UI updates - DispatchQueue

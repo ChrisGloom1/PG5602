@@ -11,7 +11,6 @@ struct APIClient {
   var getProducts: () async throws -> [Product]
   var purchaseProducts: ([Product]) async throws -> Void
   
-  
 }
 
 extension APIClient {
@@ -25,8 +24,14 @@ extension APIClient {
     let url = URL(string: "https://github.com/ChrisGloom1/PG5602/blob/master/products.json")!
     var urlRequest = URLRequest.init(url: url)
     urlRequest.httpMethod = "POST"
-    let data = try JSONEncoder().encode(products)
-    urlRequest.httpBody = data
+    let body = try JSONEncoder().encode(products)
+    urlRequest.httpBody = body
+    
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+    if let statusCode = (response as? HTTPURLResponse)?.statusCode,
+       statusCode != 200 {
+      throw APIClientError.statusCode(statusCode)
+    }
   })
   
   static let demo = APIClient(getProducts: {
@@ -35,7 +40,22 @@ extension APIClient {
     
     return [product, product2]
   }, purchaseProducts: { products in
-    
+    //throw APIClientError.stolenCard
+    return
   })
   
+  static func error(_ error: APIClientError) -> APIClient {
+    APIClient{
+      throw error
+    } purchaseProducts: { _ in
+      throw error
+    }
+  }
 } // End of APIClient extention
+
+enum APIClientError : Error {
+  case failed(underlying: Error)
+  case statusCode(Int)
+  case notEnoughFunds
+  case stolenCard
+}
