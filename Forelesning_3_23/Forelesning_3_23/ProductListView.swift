@@ -50,17 +50,53 @@ struct ProductListView: View {
            
             
             
-           let username = UserDefaults().object(forKey: AppStorageKeys.username.rawValue) as? String
+            let username = UserDefaults().object(forKey: AppStorageKeys.username.rawValue) as? String
         {
             userLoginStatus = "Logget inn bruker: \(username)"
         } else {
             userLoginStatus = "Vennligst logg inn i appen"
         }
         
-        let urlRequest = URLRequest(url: URL.init(string: "https://raw.githubusercontent.com/BeiningBogen/PG5602/master/products.json")!)
         
+        
+        getWithClosures()
+        
+        Task {
+            var urlRequest = URLRequest.init(url: URL.init(string: "https://raw.githubusercontent.com/BeiningBogen/PG5602/master/products.json")!)
+            urlRequest.httpMethod = "GET"
+            do {
+                
+                let (data, response) = await try URLSession.shared.data(for: urlRequest)
+                
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 else {
+                    print(response as? HTTPURLResponse)
+                    return
+                }
+                
+                let stringResponse = String.init(data: data, encoding: .utf8)
+                print(stringResponse!)
+                
+                let products = try JSONDecoder().decode(Product.self, from: data)
+                print(statusCode)
+                print(products)
+                    
+                DispatchQueue.main.async {
+                    self.products = products
+                }
+                
+            } catch let error {
+                print(error)
+            }
+        }
+        
+        
+    }
+    
+    func getWithClosures() {
+        
+        var urlRequest = URLRequest(url: URL.init(string: "https://raw.githubusercontent.com/BeiningBogen/PG5602/master/products.json")!)
+        urlRequest.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            
             let httpResponse = response as? HTTPURLResponse
             print(httpResponse?.statusCode)
             
@@ -81,19 +117,14 @@ struct ProductListView: View {
                 }
                 print(products)
                 
-                
-                
-                
-                
-                
             } else {
                 print("No data received")
             }
             
         }
         task.resume()
-        
     }
+    
     
     func addProduct() {
         print("user still tapped button")
