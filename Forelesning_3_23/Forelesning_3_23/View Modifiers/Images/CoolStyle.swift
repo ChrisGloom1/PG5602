@@ -15,7 +15,7 @@ struct CoolStyle: ViewModifier {
       .frame(width: 200, height: 200)
       .clipped()
       .cornerRadius(25)
-      .shadow(radius: 20)
+      .shadow(radius: 15)
   }
 }
 
