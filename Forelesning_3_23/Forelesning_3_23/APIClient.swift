@@ -40,6 +40,7 @@ extension APIClient {
     
     return [product, product2]
   }, purchaseProducts: { products in
+    
     //throw APIClientError.stolenCard
     return
   })

@@ -14,8 +14,8 @@ struct ShoppingCart: View {
   @State var isShowingError: Bool = false
   @State var shownError: APIClientError? {
     // didSet kan benyttes etter verdien er satt, mens willSet benyttes før verdien er satt
-    willSet {
-      if let _ = newValue {
+    didSet {
+      if let _ = shownError {
         isShowingError = true
       } else {
         isShowingError = false
@@ -48,6 +48,7 @@ struct ShoppingCart: View {
       } catch let error {
         print(error)
         shownError = error as? APIClientError
+        isShowingError = true
       }
     }
   }
@@ -88,6 +89,21 @@ struct ShoppingCart: View {
       onAppear()
     }.sheet(isPresented: $isShowingError) {
       Text("Feil ass, det var ikke bra....").foregroundColor(.red)
+      
+      switch shownError {
+      case .stolenCard:
+        Text("Kortet ditt er stjålet :(")
+        WebpageView(url: URL.init(string: "https://www.politiet.no")!)
+      case .notEnoughFunds:
+        Text("Nah man, du er fattig :(")
+      case .statusCode(let statusCode):
+        Text("En feil oppsto.. StatusCode: \(statusCode)")
+      case .failed(underlying: let error):
+        Text("Noe feil skjedde. Kjøp en sushi og prøv igjen")
+      default:
+        Text("Prøv igjen eller kontakt support, bruh")
+        
+      }
     }
   }
 }
