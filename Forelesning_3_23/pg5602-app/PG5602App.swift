@@ -8,11 +8,13 @@
 import SwiftUI
 
 @main
-struct Forelesning_3_23App: App {
+struct PG5602App: App {
     
     @State var numberOfItemsInShoppingCart: Int = 3
     
     @State var shoppingCart = [Product]()
+    
+    @StateObject var dataController = DataController()
     
     /// Read from disk
     func onAppear() {
@@ -82,6 +84,12 @@ struct Forelesning_3_23App: App {
                     }.onAppear {
                         shoppingCartOnAppear()
                     }
+                
+                StoreView()
+                    .tabItem {
+                        Label("Butikker", systemImage: "dollarsign")
+                    }
+                    .environment(\.managedObjectContext, dataController.container.viewContext)
                 
                 SettingsView()
                     .tabItem {
