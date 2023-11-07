@@ -10,11 +10,13 @@ import CoreData
 
 
 class DataController: ObservableObject {
+    
     let container = NSPersistentContainer(name: "Model")
         
     init() {
         
         container.loadPersistentStores { description, error in
+//            Store
             if let error = error {
                 print(error)
             }
@@ -23,4 +25,12 @@ class DataController: ObservableObject {
         }
             
     }
+    
+    static let shared = DataController()
+}
+
+
+func testStuff() {
+    DataController.shared
+//    UIApplication.shared
 }
